@@ -1,0 +1,96 @@
+您試著做看看：
+題目一：試以C#設計一支程式記錄主機使用的硬體狀況至資料庫
+要求：
+1、監控內容至少但不限於 - CPU、記憶體、網路IO；
+2、監控頻率 - 1次/項/秒
+3、可針對已記錄的資料進行查詢；
+4、顯示與使用者操作介面，可自由規劃；
+5、以上說明若有不明之處，可在此詢問或自由發揮皆可；
+
+題目二：狀況題 - 現客戶端提供一部機台的生產狀態資料如附件，檔案內容為：
+1、pgsql0904_0922-ecid_status.csv：機台設定值
+2、pgsql0904_0922-d_status.csv & pgsql0904_0922-e_status.csv & pgsql0904_0922-s_status.csv：機台於生產期間的狀態值
+
+但因為資料提供人員不知道實際數據分析需要哪些資料，所以只能提供上述內容，問題：請試著分析上述資料間的關聯性如何，並試著使用這份資料產生可能的應用（如果可以的話）
+1、若有關聯，請說明參數相互間的關聯性；
+2、若無關聯，請試述您分析時的想法與做法，並儘可能針對本案提出您的建議；
+3、如果提供的資料可產生一些可能的應用，請試述您的想法與使用方向；
+
+using System;
+using System.Diagnostics;
+namespace ConsoleApp1
+{
+    public class Program
+    {
+        static void Main(string[] args)
+        {
+            // 创建对 CPU 占用百分比的性能计数器。
+            var cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
+            // 创建内存占用字节数的性能计数器
+            var ramCounter = new PerformanceCounter("Memory", "Available MBytes");
+
+            while (true)
+            {
+                float cpu = cpuCounter.NextValue();
+                float ram = ramCounter.NextValue();
+                Console.WriteLine(cpu);
+            }
+        }
+    }
+}
+
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+using System;
+
+using System.Threading;
+
+namespace 練習
+{
+    class Program
+    {
+        //static void Main(string[] args)
+        //{
+        //    //先建立連線的字串，並宣告連線
+        //    string connectString = "Data Source = localhost; Initial Catalog = 迅得; Integrated Security = SSPI";
+        //    SqlConnection sqlConnection = new SqlConnection(connectString);
+
+        //    //開啟連線
+        //    sqlConnection.Open();
+
+        //    //建立要insert至資料庫的資料
+        //    float CPU = 400;
+        //    float Memory = 400;
+        //    float InternetIO = 400;
+
+        //    //將sql語法組成字串
+        //    String sqlString = $@"insert into Practice (CPU, Memory, InternetIO)
+        //                  values('{CPU}',{Memory},'{InternetIO}')";
+        //    Console.WriteLine(sqlString);
+
+        //    //執行sql語法
+        //    SqlCommand command = new SqlCommand(sqlString, sqlConnection);
+
+        //    //取回結果並顯示
+        //    int result = command.ExecuteNonQuery();
+        //    Console.WriteLine($"成功新增{result}筆資料!");
+        //    Console.ReadLine();
+
+        //    //關閉連線
+        //    sqlConnection.Close();
+        //}
+
+        static void Main(string[] args) 
+        {
+
+        }
+
+    }
+}
