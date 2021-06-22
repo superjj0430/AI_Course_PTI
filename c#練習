@@ -55,11 +55,10 @@ class Program
 
         for (int i = 0; i < 5;i++)
         {
-            Console.WriteLine("Bytes Sent: {0}", pcsent.NextValue() / 1024);
-            Console.WriteLine("Bytes Received: {0}", pcreceived.NextValue() / 1024);
+            Console.WriteLine("Bytes Sent: {0}", (pcsent.NextValue() / 1024).ToString());
+            Console.WriteLine("Bytes Received: {0}", (pcreceived.NextValue() / 1024).ToString());
 
-            dt.Rows.Add("Input", (pcsent.NextValue() / 1024)).ToString();
-            dt.Rows.Add("Output", (pcreceived.NextValue() / 1024)).ToString();
+            dt.Rows.Add((pcsent.NextValue() / 1024).ToString(), (pcreceived.NextValue() / 1024).ToString());
 
             Thread.Sleep(1000);
         }
