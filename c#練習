@@ -18,27 +18,61 @@
 
 using System;
 using System.Diagnostics;
-namespace ConsoleApp1
-{
-    public class Program
-    {
-        static void Main(string[] args)
-        {
-            // 创建对 CPU 占用百分比的性能计数器。
-            var cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
-            // 创建内存占用字节数的性能计数器
-            var ramCounter = new PerformanceCounter("Memory", "Available MBytes");
+using System.Threading;
+using System.Data;
 
-            while (true)
-            {
-                float cpu = cpuCounter.NextValue();
-                float ram = ramCounter.NextValue();
-                Console.WriteLine(cpu);
-            }
+class Program
+{
+    static void Main()
+    {
+        //    static PerformanceCounter cpu = new PerformanceCounter(
+        //        "Processor", "% Processor Time", "_Total");
+        //    static PerformanceCounter memory = new PerformanceCounter(
+        //        "Memory", "% Committed Bytes in Use");
+
+        //    static void Main(string[] args)
+        //    {
+        //        while (true)
+        //        {
+        //            //Console.WriteLine("CPU: {0:n1}%", cpu.NextValue());
+        //            //Console.WriteLine("Memory: {0:n0}%", memory.NextValue());
+        //            Console.WriteLine(cpu.NextValue().GetType());
+        //            Thread.Sleep(1000);
+        //        }
+        //    }
+
+
+        DataTable dt = new DataTable();
+        DataColumn dc = new DataColumn("Input", typeof(string));
+        DataColumn dc2 = new DataColumn("Output", typeof(string));
+        dt.Columns.Add(dc);
+        dt.Columns.Add(dc2);
+
+        PerformanceCounterCategory pcg = new PerformanceCounterCategory("Network Interface");
+        string instance = pcg.GetInstanceNames()[0];
+        PerformanceCounter pcsent = new PerformanceCounter("Network Interface", "Bytes Sent/sec", instance);
+        PerformanceCounter pcreceived = new PerformanceCounter("Network Interface", "Bytes Received/sec", instance);
+
+        for (int i = 0; i < 5;i++)
+        {
+            Console.WriteLine("Bytes Sent: {0}", pcsent.NextValue() / 1024);
+            Console.WriteLine("Bytes Received: {0}", pcreceived.NextValue() / 1024);
+
+            dt.Rows.Add("Input", (pcsent.NextValue() / 1024)).ToString();
+            dt.Rows.Add("Output", (pcreceived.NextValue() / 1024)).ToString();
+
+            Thread.Sleep(1000);
         }
+
+        foreach (DataRow dr in dt.Rows) 
+        {
+            Console.WriteLine(dr["Input"]);
+            Console.WriteLine(dr["Output"]);           
+        }
+        Console.ReadKey();
+
     }
 }
-
 
 
 
